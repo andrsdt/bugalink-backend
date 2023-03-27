@@ -112,6 +112,7 @@ AUTH_PASSWORD_VALIDATORS = [
 REST_FRAMEWORK = {
     # Authentication
     "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework.authentication.SessionAuthentication",
         "rest_framework.authentication.TokenAuthentication",
         "dj_rest_auth.jwt_auth.JWTCookieAuthentication",
     ),
@@ -138,6 +139,9 @@ LOGIN_REDIRECT_URL = "/"
 REST_USE_JWT = True
 JWT_AUTH_COOKIE = "auth"
 
+REST_AUTH_REGISTER_SERIALIZERS = {
+    "REGISTER_SERIALIZER": "authentication.serializers.CustomRegisterSerializer",
+}
 
 ALLOWED_HOSTS = ["*"]
 

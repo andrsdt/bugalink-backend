@@ -6,7 +6,10 @@ from driver_routines.models import DriverRoutine
 from driver_routines.serializers import DriverRoutineSerializer
 
 
-class DriverRoutineViewSet(LoginRequiredMixin, viewsets.ModelViewSet):
+# TODO: For making this endpoint login-protected, add the following:
+# from django.contrib.auth.mixins import LoginRequiredMixin
+# class DriverRoutineViewSet(LoginRequiredMixin, viewsets.ModelViewSet):
+class DriverRoutineViewSet(viewsets.ModelViewSet):
     queryset = DriverRoutine.objects.all()
     serializer_class = DriverRoutineSerializer
 
