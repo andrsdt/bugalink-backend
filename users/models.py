@@ -7,12 +7,12 @@ class User(AbstractBaseUser):
     email = models.EmailField(unique=True)
     first_name = models.CharField(max_length=30)
     last_name = models.CharField(max_length=150)
-    is_passenger = models.BooleanField(default=True)
-    is_driver = models.BooleanField(default=False)
     # birth_date = models.DateField(null=True, blank=True)
     date_joined = models.DateTimeField(auto_now_add=True)
     verified = models.BooleanField(default=False)
     photo = models.ImageField(upload_to="users/profile_pictures/", blank=True)
+    is_passenger = models.BooleanField(default=True)
+    is_driver = models.BooleanField(default=False)
 
     USERNAME_FIELD = "email"
     # REQUIRED_FIELDS = []

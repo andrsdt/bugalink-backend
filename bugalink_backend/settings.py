@@ -127,6 +127,7 @@ SPECTACULAR_SETTINGS = {
     "VERSION": "1.0.0",
 }
 
+APPEND_SLASH = False
 
 # Dj-rest-auth and all-auth config
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"

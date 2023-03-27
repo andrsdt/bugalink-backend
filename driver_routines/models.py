@@ -2,10 +2,14 @@ from django.contrib.postgres.fields import ArrayField
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+from drivers.models import Driver
 from locations.models import Location
 
 
 class DriverRoutine(models.Model):
+    driver = models.ForeignKey(
+        Driver, on_delete=models.CASCADE, related_name="routines", null=True
+    )
     price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     note = models.CharField(max_length=2000, blank=True)
     is_single_ride = models.BooleanField(default=False)
