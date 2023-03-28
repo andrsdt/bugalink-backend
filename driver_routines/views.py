@@ -1,6 +1,5 @@
 from datetime import datetime
 
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import get_object_or_404
 from rest_framework import mixins, status, viewsets
 from rest_framework.response import Response
@@ -12,7 +11,6 @@ from utils import next_weekday
 
 
 class DriverRoutineViewSet(
-    LoginRequiredMixin,
     # CRUD operations
     mixins.RetrieveModelMixin,
     mixins.CreateModelMixin,
