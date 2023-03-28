@@ -1,11 +1,9 @@
 from rest_framework import serializers
 
+from locations.models import Location
 
-class LocationSerializer(serializers.Serializer):
-    name = serializers.CharField()
-    # coordinates = serializers.DictField(
-    #     child=serializers.DecimalField(max_digits=9, decimal_places=6)
-    # )
 
-    latitude = serializers.DecimalField(max_digits=9, decimal_places=6)
-    longitude = serializers.DecimalField(max_digits=9, decimal_places=6)
+class LocationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Location
+        fields = ["latitude", "longitude", "address"]

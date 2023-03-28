@@ -1,26 +1,27 @@
 from rest_framework import serializers
 
-from driver_routines.models import DriverRoutine
 from driver_routines.serializers import DriverRoutineSerializer
 from drivers.models import Driver
+from trips.models import Trip
+from trips.serializers import TripSerializer
 
 
 class DriverSerializer(serializers.ModelSerializer):
-    routines = DriverRoutineSerializer(many=True)
+    # NOTE: if the serializer is giving info we don't need, try the following:
+    # routines = DriverRoutineSerializer(many=True)
+
+    routines = serializers.SerializerMethodField()
+    trips = serializers.SerializerMethodField()
 
     class Meta:
         model = Driver
-        fields = ["id", "routines"]
+        fields = ("id", "routines", "trips")
 
-    # TODO: check if necessary, maybe the user is not being created with this
-    # Used internally for creating a driver
-    # def create(self, validated_data):
-    #     routines_data = validated_data.pop("routines")
-    #     driver = Driver.objects.create(**validated_data)
-    #     for routine_data in routines_data:
-    #         DriverRoutine.objects.create(driver=driver, **routine_data)
+    def get_routines(self, obj):
+        routines = obj.routines.all()
+        return DriverRoutineSerializer(routines, many=True).data
 
-    #     # Link routines to the driver
-    #     driver.routines.set(routines_data)
-
-    #     return driver
+    def get_trips(self, obj):
+        # Get the trips where the driver is the driver
+        trips = Trip.objects.filter(driver_routine__driver=obj)
+        return TripSerializer(trips, many=True).data

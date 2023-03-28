@@ -1,6 +1,7 @@
 from allauth.account.utils import setup_user_email
 from dj_rest_auth.registration.serializers import RegisterSerializer
 from django.contrib.auth import get_user_model
+from django.db import transaction
 from rest_framework import serializers
 
 from passengers.models import Passenger
@@ -21,6 +22,7 @@ class CustomRegisterSerializer(RegisterSerializer):
             "password2": self.validated_data.get("password2", ""),
         }
 
+    @transaction.atomic
     def save(self, request):
         user = get_user_model()()
         self.cleaned_data = self.get_cleaned_data()
@@ -28,7 +30,7 @@ class CustomRegisterSerializer(RegisterSerializer):
         user.first_name = self.cleaned_data["first_name"]
         user.last_name = self.cleaned_data["last_name"]
         # Add more custom fields here as needed
-        user.username = user.email
+        # user.username = user.email
         user.set_password(self.cleaned_data["password1"])
         user.save()
 
@@ -36,5 +38,6 @@ class CustomRegisterSerializer(RegisterSerializer):
         passenger.routines.set([])
         passenger.save()
 
+        user.passenger = passenger
         setup_user_email(request, user, [])
         return user

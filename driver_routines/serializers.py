@@ -5,24 +5,39 @@ from locations.models import Location
 from locations.serializers import LocationSerializer
 
 
-class DriverRoutineSerializer(serializers.Serializer):
-    id = serializers.IntegerField(read_only=True)
+class DriverRoutineSerializer(serializers.ModelSerializer):
     origin = LocationSerializer()
     destination = LocationSerializer()
-    days_of_week = serializers.ListField(child=serializers.CharField())
-    departure_time_start = serializers.DateTimeField()
-    departure_time_end = serializers.DateTimeField()
-    price = serializers.DecimalField(max_digits=5, decimal_places=2)
-    note = serializers.CharField()
-    is_single_ride = serializers.BooleanField()
-    available_seats = serializers.IntegerField(min_value=1, max_value=8)
+
+    class Meta:
+        model = DriverRoutine
+        fields = (
+            "id",
+            "origin",
+            "destination",
+            "days_of_week",
+            "departure_time_start",
+            "departure_time_end",
+            "price",
+            "note",
+            "is_recurrent",
+            "available_seats",
+        )
 
     def create(self, validated_data):
         origin_data = validated_data.pop("origin")
         destination_data = validated_data.pop("destination")
-        # TODO: try to bring existing location if it exists
-        origin = Location.objects.create(**origin_data)
-        destination = Location.objects.create(**destination_data)
+        # If the origin and destination Location objects do not already exist, they will be created.
+        origin = Location.objects.filter(**origin_data).first()
+        destination = Location.objects.filter(**destination_data).first()
+        if not origin:
+            origin = Location.objects.create(**origin_data)
+        if not destination:
+            destination = Location.objects.create(**destination_data)
+
+        # TODO: see if it's the same as self.request.user.driver
+        driver = self.context["request"].user.driver
+
         return DriverRoutine.objects.create(
-            origin=origin, destination=destination, **validated_data
+            driver=driver, origin=origin, destination=destination, **validated_data
         )

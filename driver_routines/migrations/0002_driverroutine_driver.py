@@ -5,7 +5,6 @@ import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("drivers", "0002_remove_driver_routines"),
         ("driver_routines", "0001_initial"),

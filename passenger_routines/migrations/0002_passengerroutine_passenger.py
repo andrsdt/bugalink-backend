@@ -5,7 +5,6 @@ import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("passengers", "0002_remove_passenger_routines"),
         ("passenger_routines", "0001_initial"),

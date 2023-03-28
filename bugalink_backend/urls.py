@@ -31,6 +31,9 @@ urlpatterns = [
     path("api/v1/docs", SpectacularSwaggerView.as_view(url_name="schema"), name="docs"),
     # URLs for the app
     path("api/v1/", include("users.urls")),
+    path("api/v1/", include("passengers.urls")),
+    path("api/v1/", include("drivers.urls")),
     path("api/v1/", include("driver_routines.urls")),
     path("api/v1/", include("passenger_routines.urls")),
+    path("api/v1/", include("trips.urls")),
 ]

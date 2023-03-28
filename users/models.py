@@ -23,9 +23,6 @@ class User(AbstractBaseUser):
         return self.email
 
 
-# Create a custom admin user
-
-
 class AdminUser(User):
     class Meta:
         proxy = True

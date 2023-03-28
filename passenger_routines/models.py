@@ -4,6 +4,7 @@ from django.utils.translation import gettext_lazy as _
 
 from locations.models import Location
 from passengers.models import Passenger
+from utils import DAYS_OF_WEEK
 
 
 class PassengerRoutine(models.Model):
@@ -27,15 +28,7 @@ class PassengerRoutine(models.Model):
     )
     days_of_week = ArrayField(
         models.CharField(
-            choices=(
-                ("Mon", _("Monday")),
-                ("Tue", _("Tuesday")),
-                ("Wed", _("Wednesday")),
-                ("Thu", _("Thursday")),
-                ("Fri", _("Friday")),
-                ("Sat", _("Saturday")),
-                ("Sun", _("Sunday")),
-            ),
+            choices=DAYS_OF_WEEK,
             max_length=7,
             verbose_name=_("Day of week"),
         )
