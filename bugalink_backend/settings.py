@@ -98,7 +98,6 @@ if os.environ.get("IS_APP_ENGINE"):
         }
     }
 else:
-    print(config("NAME"))
     DATABASES = {
         "default": {
             "ENGINE": config("ENGINE"),
