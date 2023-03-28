@@ -1,9 +1,7 @@
 from django.db import transaction
 from rest_framework import status, viewsets
-from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from drivers.models import Driver
 from drivers.serializers import DriverSerializer
@@ -20,9 +18,6 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
 
 # POST /users/become-driver
 class BecomeDriverView(APIView):
-    permission_classes = [IsAuthenticated]
-    authentication_classes = [JWTAuthentication]
-
     @transaction.atomic
     def post(self, request):
         # If the user is already a driver, return a 400 status code
@@ -46,9 +41,6 @@ class BecomeDriverView(APIView):
 # GET /users/<user_id>/trip-requests?status=accepted
 # GET /users/<user_id>/trip-requests?status=finished # HISTORIAL
 class UserTripsView(APIView):
-    permission_classes = [IsAuthenticated]
-    authentication_classes = [JWTAuthentication]
-
     def get(self, request, id):
         # If the user is not the same as the one in the URL, return a 403 status code
         if request.user.id != int(id):

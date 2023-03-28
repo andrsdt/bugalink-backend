@@ -1,8 +1,6 @@
 from django.shortcuts import get_object_or_404
 from rest_framework import mixins, status, viewsets
-from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from passenger_routines.models import PassengerRoutine
 from passenger_routines.serializers import PassengerRoutineSerializer
@@ -16,9 +14,6 @@ class PassengerRoutineViewSet(
     mixins.DestroyModelMixin,
     viewsets.GenericViewSet,
 ):
-    permission_classes = [IsAuthenticated]
-    authentication_classes = [JWTAuthentication]
-
     queryset = PassengerRoutine.objects.all()
     serializer_class = PassengerRoutineSerializer
 
