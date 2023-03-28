@@ -1,7 +1,8 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
 from rest_framework import mixins, status, viewsets
 from rest_framework.decorators import action
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from trips.models import Trip, TripRequest
 from trips.serializers import (
@@ -37,11 +38,13 @@ class TripViewSet(
 
 
 class TripRequestViewSet(
-    LoginRequiredMixin,
     mixins.CreateModelMixin,
     mixins.UpdateModelMixin,
     viewsets.GenericViewSet,
 ):
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [JWTAuthentication]
+
     queryset = TripRequest.objects.all()
     serializer_class = TripRequestSerializer
 

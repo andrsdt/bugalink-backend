@@ -1,4 +1,5 @@
 import os
+from datetime import timedelta
 
 from decouple import config
 from dj_database_url import parse as db_url
@@ -110,16 +111,23 @@ AUTH_PASSWORD_VALIDATORS = [
 
 
 REST_FRAMEWORK = {
+    # Default permission classes
+    "DEFAULT_PERMISSION_CLASSES": ["rest_framework.permissions.IsAuthenticated"],
     # Authentication
-    "DEFAULT_AUTHENTICATION_CLASSES": (
-        "rest_framework.authentication.SessionAuthentication",
-        "rest_framework.authentication.TokenAuthentication",
-        "dj_rest_auth.jwt_auth.JWTCookieAuthentication",
-    ),
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework_simplejwt.authentication.JWTAuthentication"
+    ],
     # Activate drf_spectacular
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
 }
 
+SIMPLE_JWT = {
+    # TODO: make access token expire after 60 minutes once we have the frontend
+    # asking for a new token when the old one expires. We are doing this because
+    # we need the auth mechanism to work for now.
+    "ACCESS_TOKEN_LIFETIME": timedelta(days=99),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
+}
 
 # drf_spectacular config
 SPECTACULAR_SETTINGS = {

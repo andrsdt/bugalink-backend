@@ -1,14 +1,14 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import get_object_or_404
 from rest_framework import mixins, status, viewsets
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from passenger_routines.models import PassengerRoutine
 from passenger_routines.serializers import PassengerRoutineSerializer
 
 
 class PassengerRoutineViewSet(
-    LoginRequiredMixin,
     # GET, POST, PUT, DELETE
     mixins.RetrieveModelMixin,
     mixins.CreateModelMixin,
@@ -16,6 +16,9 @@ class PassengerRoutineViewSet(
     mixins.DestroyModelMixin,
     viewsets.GenericViewSet,
 ):
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [JWTAuthentication]
+
     queryset = PassengerRoutine.objects.all()
     serializer_class = PassengerRoutineSerializer
 
@@ -25,6 +28,7 @@ class PassengerRoutineViewSet(
         return super().get_serializer_class()
 
     # Individual GET
+    # /passenger-routines/1/
     def retrieve(self, request, pk=None):
         queryset = PassengerRoutine.objects.all()
         passenger_routine = get_object_or_404(queryset, pk=pk)
