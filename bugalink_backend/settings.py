@@ -85,13 +85,30 @@ WSGI_APPLICATION = "bugalink_backend.wsgi.application"
 # Database
 # If you wish to use some other database other than the default sqlite
 # Make sure to update the value of DATABASE_URL in your .env file
-DATABASES = {
-    "default": config(
-        "DATABASE_URL",
-        default="sqlite:///" + os.path.join(BASE_DIR, "db.sqlite3"),
-        cast=db_url,
-    )
-}
+if os.environ.get("IS_APP_ENGINE"):
+
+    DATABASES = {
+        "default": {
+            "ENGINE": config("ENGINE"),
+            "NAME": config("NAME"),
+            "USER": config("USER"),
+            "PASSWORD": config("PASSWORD"),
+            "HOST": config("HOST"),
+            "PORT": config("PORT"),
+        }
+    }
+else:
+    print(config("NAME"))
+    DATABASES = {
+        "default": {
+            "ENGINE": config("ENGINE"),
+            "NAME": config("NAME"),
+            "USER": config("USER"),
+            "PASSWORD": config("PASSWORD"),
+            "HOST": "localhost",
+            "PORT": config("PORT"),
+        }
+    }
 
 
 AUTH_PASSWORD_VALIDATORS = [
