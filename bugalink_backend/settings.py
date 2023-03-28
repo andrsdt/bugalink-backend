@@ -59,6 +59,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
 ]
 
 ROOT_URLCONF = "bugalink_backend.urls"
@@ -151,7 +152,7 @@ SPECTACULAR_SETTINGS = {
     "VERSION": "1.0.0",
 }
 
-APPEND_SLASH = False
+APPEND_SLASH = True
 
 # Dj-rest-auth and all-auth config
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
@@ -183,4 +184,10 @@ USE_TZ = True
 
 STATIC_ROOT = "static"
 STATIC_URL = "/static/"
+
 STATICFILES_DIRS = []
+
+
+# TODO: only allow cors requests from the frontend (localhost:3000 or the deployed url)
+CORS_ORIGIN_ALLOW_ALL = True
+
