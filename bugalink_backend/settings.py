@@ -86,13 +86,37 @@ WSGI_APPLICATION = "bugalink_backend.wsgi.application"
 # Database
 # If you wish to use some other database other than the default sqlite
 # Make sure to update the value of DATABASE_URL in your .env file
-DATABASES = {
-    "default": config(
-        "DATABASE_URL",
-        default="sqlite:///" + os.path.join(BASE_DIR, "db.sqlite3"),
-        cast=db_url,
-    )
-}
+if os.environ.get("IS_APP_ENGINE"):
+
+    DATABASES = {
+        "default": {
+            "ENGINE": config("ENGINE"),
+            "NAME": config("NAME"),
+            "USER": config("USER"),
+            "PASSWORD": config("PASSWORD"),
+            "HOST": config("HOST"),
+            "PORT": config("PORT"),
+        }
+    }
+elif os.environ.get("IS_DOCKER"):
+    DATABASES = {
+        "default": config(
+            "DATABASE_URL",
+            default="sqlite:///" + os.path.join(BASE_DIR, "db.sqlite3"),
+            cast=db_url,
+        )
+    }
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": config("ENGINE"),
+            "NAME": config("NAME"),
+            "USER": config("USER"),
+            "PASSWORD": config("PASSWORD"),
+            "HOST": "localhost",
+            "PORT": config("PORT"),
+        }
+    }
 
 
 AUTH_PASSWORD_VALIDATORS = [
@@ -166,8 +190,11 @@ USE_L10N = True
 
 USE_TZ = True
 
-
+STATIC_ROOT = "static"
 STATIC_URL = "/static/"
+
+STATICFILES_DIRS = []
+
 
 # TODO: only allow cors requests from the frontend (localhost:3000 or the deployed url)
 CORS_ORIGIN_ALLOW_ALL = True
