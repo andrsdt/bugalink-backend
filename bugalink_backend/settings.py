@@ -98,6 +98,14 @@ if os.environ.get("IS_APP_ENGINE"):
             "PORT": config("PORT"),
         }
     }
+elif os.environ.get("IS_DOCKER"):
+    DATABASES = {
+        "default": config(
+            "DATABASE_URL",
+            default="sqlite:///" + os.path.join(BASE_DIR, "db.sqlite3"),
+            cast=db_url,
+        )
+    }
 else:
     DATABASES = {
         "default": {
@@ -190,4 +198,3 @@ STATICFILES_DIRS = []
 
 # TODO: only allow cors requests from the frontend (localhost:3000 or the deployed url)
 CORS_ORIGIN_ALLOW_ALL = True
-
