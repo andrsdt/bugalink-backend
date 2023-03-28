@@ -15,4 +15,6 @@ class RatingSerializer(serializers.ModelSerializer):
         data['id'] = instance.id
         data['trip'] = instance.trip
         data['driver'] = instance.driver.id
+        data['comment'] = instance.driver.id
+        data['value'] = instance.driver.id
         return data
