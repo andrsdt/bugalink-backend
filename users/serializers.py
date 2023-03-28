@@ -1,5 +1,6 @@
 from rest_framework import serializers
 
+from drivers.models import Driver
 from passengers.models import Passenger
 from users.models import User
 
@@ -26,4 +27,12 @@ class PassengerAsUserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Passenger
+        fields = ("user",)
+
+
+class DriverAsUserSerializer(serializers.ModelSerializer):
+    user = UserSerializer()
+
+    class Meta:
+        model = Driver
         fields = ("user",)

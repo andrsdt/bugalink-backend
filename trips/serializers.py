@@ -2,16 +2,21 @@ from rest_framework import serializers
 
 from driver_routines.serializers import DriverRoutineSerializer
 from trips.models import Trip, TripRequest
-from users.serializers import PassengerAsUserSerializer
+from users.serializers import DriverAsUserSerializer, PassengerAsUserSerializer
 
 
 class TripSerializer(serializers.ModelSerializer):
     driver_routine = DriverRoutineSerializer()
     passengers = PassengerAsUserSerializer(many=True)
+    driver = serializers.SerializerMethodField()
 
     class Meta:
         model = Trip
-        fields = ("id", "driver_routine", "passengers", "departure_datetime")
+        fields = ("id", "driver_routine", "passengers", "driver", "departure_datetime")
+
+    def get_driver(self, obj):
+        driver_routine = obj.driver_routine
+        return DriverAsUserSerializer(driver_routine.driver).data
 
 
 class TripRequestSerializer(serializers.ModelSerializer):

@@ -54,6 +54,8 @@ class UserTripsView(APIView):
         # Get the status from the query params
         # If the status is not in the query params, don't filter by it
         status_param = request.query_params.get("status")
+        status_list = status_param.split(",") if status_param else []
+
         user = User.objects.get(id=id)
         # Get the trips from the user. Those are the trips in which the user is a passenger
         # A trip has a many-to-many relationship with passengers, and we want to see if the
@@ -68,8 +70,11 @@ class UserTripsView(APIView):
 
         trips_by_user = trips_where_user_is_passenger | trips_where_user_is_driver
 
+        # Filter the trips based on the status values
         trips_matching_status = (
-            trips_by_user.filter(status=status_param) if status_param else trips_by_user
+            trips_by_user.filter(status__in=status_list)
+            if status_list
+            else trips_by_user
         )
 
         # Return the trips with a 200 status code
